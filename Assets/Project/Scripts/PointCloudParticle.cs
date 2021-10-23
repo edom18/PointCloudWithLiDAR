@@ -30,8 +30,7 @@ public class PointCloudParticle : MonoBehaviour
     private ComputeBuffer _argBuffer = null;
     private uint[] _args = new uint[] {0, 0, 0, 0, 0};
 
-    public bool CanUpdate => (ColorMap != null && DepthMap != null);
-    public bool NeedsDraw { get; set; } = true;
+    private bool CanUpdate => (ColorMap != null && DepthMap != null);
 
     #region ### ------------------------------ MonoBehaviour ------------------------------ ###
 
@@ -42,7 +41,7 @@ public class PointCloudParticle : MonoBehaviour
 
     private void Update()
     {
-        if (CanUpdate && NeedsDraw)
+        if (CanUpdate)
         {
             DrawParticles();
         }
