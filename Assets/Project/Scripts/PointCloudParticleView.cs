@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PointCloudParticleView : MonoBehaviour
@@ -8,6 +9,11 @@ public class PointCloudParticleView : MonoBehaviour
     #region ### ------------------------------ MonoBehaviour ------------------------------ ###
 
     private void Awake()
+    {
+        UpdateParticle();
+    }
+
+    private void Update()
     {
         UpdateParticle();
     }
