@@ -72,3 +72,6 @@ crashlytics-build.properties
 
 # For GAUGUIN
 /Assets/PlatformSDK*
+
+com.kyrylokuzyk.arfoundationremote
+ARFoundationRemoteInstaller
