@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
+  m_IndirectSpecularColor: {r: 0.2850265, g: 0.3713928, b: 0.49600852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -191,7 +191,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 128, y: -128}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 634, y: 475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201144306
 MonoBehaviour:
@@ -465,7 +465,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -128, y: -128}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 588, y: 441}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &475131542
 MonoBehaviour:
@@ -769,7 +769,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -829,8 +829,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b3beb7771092d4d8b471689e1945cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 512
-  _height: 512
+  _width: 634
+  _height: 475
   _scale: 0.005
   _computeShader: {fileID: 7200000, guid: 163a387dfac856242bf86e2c6295e303, type: 3}
   _particleMat: {fileID: 2100000, guid: 9f88b59434ab74646b5140d0efac7cb2, type: 2}
