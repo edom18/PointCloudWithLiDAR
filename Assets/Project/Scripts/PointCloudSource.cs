@@ -19,7 +19,7 @@ public class PointCloudSource : MonoBehaviour
     public RenderTexture ColorTexture { get; private set; }
     public Texture DepthTexture { get; private set; }
     public Metadata Metadata => _metadata;
-    public bool IsReady { get; private set; } = false;
+    public bool IsReady => (ColorTexture != null) && (DepthTexture != null);
 
     private int _width = 1024;
     private int _height = 1024;
@@ -62,7 +62,6 @@ public class PointCloudSource : MonoBehaviour
                 if (_firstTake)
                 {
                     _firstTake = false;
-                    IsReady = true;
                     
                     _width = tex.width;
                     _height = tex.height;
@@ -119,8 +118,6 @@ public class PointCloudSource : MonoBehaviour
     private void Awake()
     {
         CreateMaterials();
-
-        CreateRenderTextures();
     }
 
     private void Start()
