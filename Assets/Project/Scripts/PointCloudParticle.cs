@@ -58,6 +58,8 @@ public class PointCloudParticle : MonoBehaviour
 
         _width = cameraResolution[0];
         _height = cameraResolution[1];
+
+        Debug.Log($"Created with size {_width} x {_height}");
         
         // Recreate a material because it's shared to other particle views.
         _particleMat = Instantiate(_particleMat);
