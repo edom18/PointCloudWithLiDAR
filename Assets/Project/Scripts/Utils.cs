@@ -33,6 +33,7 @@ public struct Metadata
     public Matrix4x4 projectionMatrix;
     public Vector2 depthRange;
     public Vector4 intrinsic;
+    public Vector2Int cameraResolution;
 }
 
 static class ProjectionUtil

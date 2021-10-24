@@ -12,7 +12,8 @@ int _PositionScale;
 float _DepthOffset;
 float4 _IntrinsicsVector;
 float4x4 _TransformMatrix;
-uint2 _CameraResolution;
+uint2 _DepthResolution;
+float2 _GridPointsScale;
 
 float _Scale;
 float _MaxFar;
@@ -23,12 +24,10 @@ void Update(uint3 id : SV_DispatchThreadID)
 {
     const int index = id.y * _Width + id.x;
 
-    uint2 gridPoint = id.xy * 7;
-    float2 uv = float2(id.xy) / _CameraResolution;
+    uint2 gridPoint = id.xy * _GridPointsScale;
+    float2 uv = float2(id.xy) / _DepthResolution;
 
     Particle p = _ParticleBuffer[index];
-    // float4 color = _ColorMap[id.xy];
-    // float depth = _DepthMap[depthPos].x * 1000.0;
     float4 color = _ColorMap.SampleLevel(_LinearClamp, uv, 0);
     float depth = _DepthMap.SampleLevel(_LinearClamp, uv, 0).x * 1000.0;
     float xrw = (float(gridPoint.x) - _IntrinsicsVector.z) * depth / _IntrinsicsVector.x;

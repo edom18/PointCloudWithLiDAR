@@ -43,6 +43,8 @@ public class PointCloudSource : MonoBehaviour
             intrinsics.principalPoint.x,
             intrinsics.principalPoint.y
         );
+
+        _metadata.cameraResolution = intrinsics.resolution;
     }
 
     private void OnCameraFrameReceived(ARCameraFrameEventArgs args)
