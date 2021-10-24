@@ -6,6 +6,8 @@ public class PointCloudParticleView : MonoBehaviour
     [SerializeField] private PointCloudSource _pointCloudSource;
     [SerializeField] private PointCloudParticle _pointCloudParticle;
 
+    private bool _firstTake = true;
+
     #region ### ------------------------------ MonoBehaviour ------------------------------ ###
 
     private void Awake()
@@ -23,6 +25,12 @@ public class PointCloudParticleView : MonoBehaviour
     private void UpdateParticle()
     {
         if (!_pointCloudSource.IsReady) return;
+
+        if (_firstTake)
+        {
+            _firstTake = false;
+            _pointCloudParticle.Initialize(_pointCloudSource.CameraResolution);
+        }
         
         Metadata metadata = _pointCloudSource.Metadata;
         _pointCloudParticle.ColorMap = _pointCloudSource.ColorTexture;

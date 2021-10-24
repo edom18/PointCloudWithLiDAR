@@ -32,13 +32,9 @@ public class PointCloudParticle : MonoBehaviour
     private uint[] _args = new uint[] {0, 0, 0, 0, 0};
 
     private bool CanUpdate => (ColorMap != null && DepthMap != null);
+    private bool _hasInitialized = false;
 
     #region ### ------------------------------ MonoBehaviour ------------------------------ ###
-
-    private void Awake()
-    {
-        Initialize();
-    }
 
     private void Update()
     {
@@ -56,8 +52,15 @@ public class PointCloudParticle : MonoBehaviour
 
     #endregion ### ------------------------------ MonoBehaviour ------------------------------ ###
 
-    private void Initialize()
+    public void Initialize(int[] cameraResolution)
     {
+        if (_hasInitialized) return;
+
+        _hasInitialized = true;
+
+        _width = cameraResolution[0];
+        _height = cameraResolution[1];
+        
         // Recreate a material because it's shared to other particle views.
         _particleMat = Instantiate(_particleMat);
 
