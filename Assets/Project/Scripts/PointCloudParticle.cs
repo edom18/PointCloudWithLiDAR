@@ -75,7 +75,7 @@ public class PointCloudParticle : MonoBehaviour
         {
             particles[i] = new Particle
             {
-                scale = _scale,
+                scale = 0,
                 position = Random.insideUnitSphere,
                 color = Vector4.one,
             };
