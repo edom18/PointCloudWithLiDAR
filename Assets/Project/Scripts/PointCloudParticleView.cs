@@ -38,8 +38,6 @@ public class PointCloudParticleView : MonoBehaviour
         _pointCloudParticle.IntrinsicsVector = metadata.intrinsic;
         _pointCloudParticle.DepthResolution = _pointCloudSource.CameraResolution;
         _pointCloudParticle.CameraResolution = metadata.cameraResolution;
-        // Vector4 projectionVector = ProjectionUtil.GetVector(metadata.projectionMatrix);
-        // _pointCloudParticle.ProjectionVector = projectionVector;
 
         _pointCloudParticle.UpdateParticles();
     }

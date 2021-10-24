@@ -17,8 +17,6 @@ public class PointCloudParticle : MonoBehaviour
     [SerializeField] private ComputeShader _computeShader = null;
     [SerializeField] private Material _particleMat;
     [SerializeField] private Mesh _particleMesh;
-    [SerializeField] private float _depthOffset = 0.03f;
-    [SerializeField] private float _maxFar = 3.88f;
 
     public Texture ColorMap { get; set; }
     public Texture DepthMap { get; set; }
@@ -100,9 +98,6 @@ public class PointCloudParticle : MonoBehaviour
     {
         _computeShader.SetInt("_Width", _width);
         _computeShader.SetInt("_Height", _height);
-        _computeShader.SetFloat("_Scale", _scale);
-        _computeShader.SetFloat("_MaxFar", _maxFar);
-        _computeShader.SetFloat("_DepthOffset", _depthOffset);
         _computeShader.SetTexture(_kernelId, "_ColorMap", ColorMap);
         _computeShader.SetTexture(_kernelId, "_DepthMap", DepthMap);
         _computeShader.SetInts("_DepthResolution", DepthResolution);

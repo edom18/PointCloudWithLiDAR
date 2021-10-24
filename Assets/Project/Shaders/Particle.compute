@@ -8,15 +8,11 @@ Texture2D<float4> _DepthMap;
 
 int _Width;
 int _Height;
-int _PositionScale;
-float _DepthOffset;
 float4 _IntrinsicsVector;
 float4x4 _TransformMatrix;
 uint2 _DepthResolution;
 float2 _GridPointsScale;
 
-float _Scale;
-float _MaxFar;
 SamplerState _LinearClamp;
 
 [numthreads(8,8,1)]

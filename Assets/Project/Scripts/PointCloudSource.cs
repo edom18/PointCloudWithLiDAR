@@ -27,7 +27,6 @@ public class PointCloudSource : MonoBehaviour
 
     private bool _firstTake = true;
 
-
     private void UpdateMetadata()
     {
         _cameraManager.TryGetIntrinsics(out XRCameraIntrinsics intrinsics);
