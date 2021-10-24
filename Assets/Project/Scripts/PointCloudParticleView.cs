@@ -28,6 +28,7 @@ public class PointCloudParticleView : MonoBehaviour
         _pointCloudParticle.ColorMap = _pointCloudSource.ColorTexture;
         _pointCloudParticle.DepthMap = _pointCloudSource.DepthTexture;
         _pointCloudParticle.IntrinsicsVector = metadata.intrinsic;
+        _pointCloudParticle.CameraResolution = _pointCloudSource.CameraResolution;
         // Vector4 projectionVector = ProjectionUtil.GetVector(metadata.projectionMatrix);
         // _pointCloudParticle.ProjectionVector = projectionVector;
 

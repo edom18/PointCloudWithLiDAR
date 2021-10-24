@@ -20,31 +20,31 @@ public class PointCloudSource : MonoBehaviour
     public Texture DepthTexture { get; private set; }
     public Metadata Metadata => _metadata;
     public bool IsReady => (ColorTexture != null) && (DepthTexture != null);
+    public int[] CameraResolution { get; } = new int[2];
 
     private int _width = 1024;
     private int _height = 1024;
 
     private bool _firstTake = true;
 
-    private void UpdateMetadata(ARCameraFrameEventArgs args)
+
+    private void UpdateMetadata()
     {
-        // Texture2D tex = args.textures[0];
-        // int width_camera = tex.width;
-        // int width_depth = Width;
-
         _cameraManager.TryGetIntrinsics(out XRCameraIntrinsics intrinsics);
-
-        // float ratio = (float)width_depth / (float)width_camera;
 
         _metadata.position = _camera.transform.position;
         _metadata.rotation = _camera.transform.rotation;
         _metadata.projectionMatrix = _projectionMatrix;
         _metadata.depthRange = new Vector2(_minDepth, _maxDepth);
+
+        float scaleResX = (float)ColorTexture.width / (float)DepthTexture.width;
+        float scaleResY = (float)ColorTexture.height / (float)DepthTexture.height;
+
         _metadata.intrinsic = new Vector4(
-            intrinsics.focalLength.x,
-            intrinsics.focalLength.y,
-            intrinsics.principalPoint.x,
-            intrinsics.principalPoint.y
+            intrinsics.focalLength.x / scaleResX,
+            intrinsics.focalLength.y / scaleResY,
+            intrinsics.principalPoint.x / scaleResX,
+            intrinsics.principalPoint.y / scaleResY
         );
     }
 
@@ -62,35 +62,23 @@ public class PointCloudSource : MonoBehaviour
                 if (_firstTake)
                 {
                     _firstTake = false;
-                    
+
                     _width = tex.width;
                     _height = tex.height;
                     CreateRenderTextures();
                 }
-                
+
                 _makeRGBMaterial.SetTexture(ShaderID.TextureY, tex);
-                UpdateMetadata(args);
+                
+                if (IsReady) UpdateMetadata();
             }
             else if (id == ShaderID.TextureCbCr)
             {
                 _makeRGBMaterial.SetTexture(ShaderID.TextureCbCr, tex);
-                UpdateMetadata(args);
+                
+                if (IsReady) UpdateMetadata();
             }
         }
-
-        if (args.projectionMatrix.HasValue)
-        {
-            _projectionMatrix = args.projectionMatrix.Value;
-            _projectionMatrix[1, 1] *= (16f / 9f) / _camera.aspect;
-        }
-
-        // Use the first texture to calculate the source texture aspect ratio.
-        Texture2D tex1 = args.textures[0];
-        float texAspect = (float)tex1.width / tex1.height;
-
-        // Aspect ratio compensation factor for the multiplrexer.
-        float aspectFix = texAspect / (16f / 9f);
-        _makeRGBMaterial.SetFloat(ShaderID.AspectFix, aspectFix);
     }
 
     /// <summary>
@@ -108,7 +96,11 @@ public class PointCloudSource : MonoBehaviour
             if (id == ShaderID.EnvironmentDepth)
             {
                 DepthTexture = tex;
-                // _makeRGBMaterial.SetTexture(ShaderID.EnvironmentDepth, tex);
+
+                CameraResolution[0] = tex.width;
+                CameraResolution[1] = tex.height;
+                
+                if (IsReady) UpdateMetadata();
             }
         }
     }
