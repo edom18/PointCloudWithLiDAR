@@ -37,14 +37,11 @@ public class PointCloudSource : MonoBehaviour
         _metadata.projectionMatrix = _projectionMatrix;
         _metadata.depthRange = new Vector2(_minDepth, _maxDepth);
 
-        float scaleResX = (float)ColorTexture.width / (float)DepthTexture.width;
-        float scaleResY = (float)ColorTexture.height / (float)DepthTexture.height;
-
         _metadata.intrinsic = new Vector4(
-            intrinsics.focalLength.x / scaleResX,
-            intrinsics.focalLength.y / scaleResY,
-            intrinsics.principalPoint.x / scaleResX,
-            intrinsics.principalPoint.y / scaleResY
+            intrinsics.focalLength.x,
+            intrinsics.focalLength.y,
+            intrinsics.principalPoint.x,
+            intrinsics.principalPoint.y
         );
     }
 
