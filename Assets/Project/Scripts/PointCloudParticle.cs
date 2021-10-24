@@ -20,11 +20,23 @@ public class PointCloudParticle : MonoBehaviour
 
     public Texture ColorMap { get; set; }
     public Texture DepthMap { get; set; }
-    public Vector4 IntrinsicsVector { get; set; } = new Vector4(1, 1, 0, 0);
-    public int[] DepthResolution { get; set; }
+    public Vector4 Intrinsics { get; set; } = new Vector4(1, 1, 0, 0);
+
+    public Vector2Int DepthResolution
+    {
+        get => _depthResolution;
+        set
+        {
+            _depthResolution = value;
+            _depthResolutionArray[0] = _depthResolution.x;
+            _depthResolutionArray[1] = _depthResolution.y;
+        }
+    }
     public Vector2Int CameraResolution { get; set; }
-    
+
+    private int[] _depthResolutionArray = new int[2];
     private int _kernelId = 0;
+    private Vector2Int _depthResolution = Vector2Int.zero;
     private ComputeBuffer _particleBuffer = null;
     private ComputeBuffer _argBuffer = null;
     private uint[] _args = new uint[] {0, 0, 0, 0, 0};
@@ -50,14 +62,14 @@ public class PointCloudParticle : MonoBehaviour
 
     #endregion ### ------------------------------ MonoBehaviour ------------------------------ ###
 
-    public void Initialize(int[] cameraResolution)
+    public void Initialize(Vector2Int cameraResolution)
     {
         if (_hasInitialized) return;
 
         _hasInitialized = true;
 
-        _width = cameraResolution[0];
-        _height = cameraResolution[1];
+        _width = cameraResolution.x;
+        _height = cameraResolution.y;
 
         Debug.Log($"Created with size {_width} x {_height}");
         
@@ -102,11 +114,11 @@ public class PointCloudParticle : MonoBehaviour
         _computeShader.SetInt("_Height", _height);
         _computeShader.SetTexture(_kernelId, "_ColorMap", ColorMap);
         _computeShader.SetTexture(_kernelId, "_DepthMap", DepthMap);
-        _computeShader.SetInts("_DepthResolution", DepthResolution);
-        _computeShader.SetVector("_IntrinsicsVector", IntrinsicsVector);
+        _computeShader.SetInts("_DepthResolution", _depthResolutionArray);
+        _computeShader.SetVector("_IntrinsicsVector", Intrinsics);
         Vector4 gridScale = new Vector4(
-            (float)CameraResolution.x / (float)DepthResolution[0],
-            (float)CameraResolution.y / (float)DepthResolution[1],
+            (float)CameraResolution.x / (float)DepthResolution.x,
+            (float)CameraResolution.y / (float)DepthResolution.y,
             0, 0);
         _computeShader.SetVector("_GridPointsScale", gridScale);
         _computeShader.SetMatrix("_TransformMatrix", transform.localToWorldMatrix);

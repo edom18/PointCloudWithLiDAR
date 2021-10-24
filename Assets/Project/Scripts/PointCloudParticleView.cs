@@ -89,7 +89,7 @@ public class PointCloudParticleView : MonoBehaviour
         Metadata metadata = _pointCloudSource.Metadata;
         _pointCloudParticle.ColorMap = _pointCloudSource.ColorTexture;
         _pointCloudParticle.DepthMap = _pointCloudSource.DepthTexture;
-        _pointCloudParticle.IntrinsicsVector = metadata.intrinsic;
+        _pointCloudParticle.Intrinsics = metadata.intrinsic;
         _pointCloudParticle.DepthResolution = _pointCloudSource.CameraResolution;
         _pointCloudParticle.CameraResolution = metadata.cameraResolution;
 

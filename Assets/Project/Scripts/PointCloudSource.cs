@@ -20,7 +20,7 @@ public class PointCloudSource : MonoBehaviour
     public Texture DepthTexture { get; private set; }
     public Metadata Metadata => _metadata;
     public bool IsReady => (ColorTexture != null) && (DepthTexture != null);
-    public int[] CameraResolution { get; } = new int[2];
+    public Vector2Int CameraResolution { get; private set; } = Vector2Int.zero;
 
     private int _width = 1024;
     private int _height = 1024;
@@ -93,8 +93,7 @@ public class PointCloudSource : MonoBehaviour
             {
                 DepthTexture = tex;
 
-                CameraResolution[0] = tex.width;
-                CameraResolution[1] = tex.height;
+                CameraResolution = new Vector2Int(tex.width, tex.height);
                 
                 if (IsReady) UpdateMetadata();
             }
