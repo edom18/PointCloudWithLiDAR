@@ -120,9 +120,11 @@ public class PointCloudSource : MonoBehaviour
 
     private void Update()
     {
+        if (ColorTexture == null) return;
+        
         Vector2 range = new Vector2(_minDepth, _maxDepth);
         _makeRGBMaterial.SetVector(ShaderID.DepthRange, range);
-
+        
         // Update the render texture.
         Graphics.Blit(null, ColorTexture, _makeRGBMaterial, 0);
     }
