@@ -22,4 +22,5 @@ public struct Metadata
     public Quaternion rotation;
     public Vector4 intrinsic;
     public Vector2Int cameraResolution;
+    public Vector2Int depthResolution;
 }

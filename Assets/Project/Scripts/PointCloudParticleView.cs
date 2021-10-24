@@ -79,19 +79,24 @@ public class PointCloudParticleView : MonoBehaviour
     private void UpdateParticle()
     {
         if (!_pointCloudSource.IsReady) return;
+        
+        Metadata metadata = _pointCloudSource.Metadata;
 
         if (_firstTake)
         {
             _firstTake = false;
-            _pointCloudParticle.Initialize(_pointCloudSource.CameraResolution);
+            _pointCloudParticle.Initialize(metadata.depthResolution);
         }
         
-        Metadata metadata = _pointCloudSource.Metadata;
         _pointCloudParticle.ColorMap = _pointCloudSource.ColorTexture;
         _pointCloudParticle.DepthMap = _pointCloudSource.DepthTexture;
         _pointCloudParticle.Intrinsics = metadata.intrinsic;
-        _pointCloudParticle.DepthResolution = _pointCloudSource.CameraResolution;
+        _pointCloudParticle.DepthResolution = metadata.depthResolution;
         _pointCloudParticle.CameraResolution = metadata.cameraResolution;
+        _pointCloudParticle.GridPointsScale = new Vector4(
+            (float)metadata.cameraResolution.x / (float)metadata.depthResolution.x,
+            (float)metadata.cameraResolution.y / (float)metadata.depthResolution.y,
+            0, 0);
 
         _pointCloudParticle.UpdateParticles();
     }

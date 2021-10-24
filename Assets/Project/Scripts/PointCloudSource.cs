@@ -20,7 +20,6 @@ public class PointCloudSource : MonoBehaviour
     public Texture DepthTexture { get; private set; }
     public Metadata Metadata => _metadata;
     public bool IsReady => (ColorTexture != null) && (DepthTexture != null);
-    public Vector2Int CameraResolution { get; private set; } = Vector2Int.zero;
 
     private int _width = 1024;
     private int _height = 1024;
@@ -33,14 +32,13 @@ public class PointCloudSource : MonoBehaviour
 
         _metadata.position = _camera.transform.position;
         _metadata.rotation = _camera.transform.rotation;
-
         _metadata.intrinsic = new Vector4(
             intrinsics.focalLength.x,
             intrinsics.focalLength.y,
             intrinsics.principalPoint.x,
             intrinsics.principalPoint.y
         );
-
+        _metadata.depthResolution = new Vector2Int(DepthTexture.width, DepthTexture.height);
         _metadata.cameraResolution = intrinsics.resolution;
     }
 
@@ -65,13 +63,13 @@ public class PointCloudSource : MonoBehaviour
                 }
 
                 _makeRGBMaterial.SetTexture(ShaderID.TextureY, tex);
-                
+
                 if (IsReady) UpdateMetadata();
             }
             else if (id == ShaderID.TextureCbCr)
             {
                 _makeRGBMaterial.SetTexture(ShaderID.TextureCbCr, tex);
-                
+
                 if (IsReady) UpdateMetadata();
             }
         }
@@ -93,8 +91,6 @@ public class PointCloudSource : MonoBehaviour
             {
                 DepthTexture = tex;
 
-                CameraResolution = new Vector2Int(tex.width, tex.height);
-                
                 if (IsReady) UpdateMetadata();
             }
         }
@@ -118,10 +114,10 @@ public class PointCloudSource : MonoBehaviour
     private void Update()
     {
         if (ColorTexture == null) return;
-        
+
         Vector2 range = new Vector2(_minDepth, _maxDepth);
         _makeRGBMaterial.SetVector(ShaderID.DepthRange, range);
-        
+
         // Update the render texture.
         Graphics.Blit(null, ColorTexture, _makeRGBMaterial, 0);
     }

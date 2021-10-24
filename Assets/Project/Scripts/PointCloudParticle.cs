@@ -21,6 +21,7 @@ public class PointCloudParticle : MonoBehaviour
     public Texture ColorMap { get; set; }
     public Texture DepthMap { get; set; }
     public Vector4 Intrinsics { get; set; } = new Vector4(1, 1, 0, 0);
+    public Vector4 GridPointsScale { get; set; } = Vector4.one;
 
     public Vector2Int DepthResolution
     {
@@ -116,11 +117,7 @@ public class PointCloudParticle : MonoBehaviour
         _computeShader.SetTexture(_kernelId, "_DepthMap", DepthMap);
         _computeShader.SetInts("_DepthResolution", _depthResolutionArray);
         _computeShader.SetVector("_IntrinsicsVector", Intrinsics);
-        Vector4 gridScale = new Vector4(
-            (float)CameraResolution.x / (float)DepthResolution.x,
-            (float)CameraResolution.y / (float)DepthResolution.y,
-            0, 0);
-        _computeShader.SetVector("_GridPointsScale", gridScale);
+        _computeShader.SetVector("_GridPointsScale", GridPointsScale);
         _computeShader.SetMatrix("_TransformMatrix", transform.localToWorldMatrix);
         _computeShader.Dispatch(_kernelId, _width / 8, _height / 8, 1);
     }
