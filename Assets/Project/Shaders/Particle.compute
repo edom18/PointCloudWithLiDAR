@@ -16,7 +16,6 @@ uint2 _CameraResolution;
 
 float _Scale;
 float _MaxFar;
-float4 _ProjectionVector;
 SamplerState _LinearClamp;
 
 [numthreads(8,8,1)]
@@ -24,6 +23,7 @@ void Update(uint3 id : SV_DispatchThreadID)
 {
     const int index = id.y * _Width + id.x;
 
+    uint2 gridPoint = id.xy * 7;
     float2 uv = float2(id.xy) / _CameraResolution;
 
     Particle p = _ParticleBuffer[index];
@@ -31,20 +31,14 @@ void Update(uint3 id : SV_DispatchThreadID)
     // float depth = _DepthMap[depthPos].x * 1000.0;
     float4 color = _ColorMap.SampleLevel(_LinearClamp, uv, 0);
     float depth = _DepthMap.SampleLevel(_LinearClamp, uv, 0).x * 1000.0;
-    // float x = float(id.x) / 500.0;
-    // float y = float(id.y) / 500.0;
-    // float z = 2.0;
-    // float x = depth * (id.x - _IntrinsicsVector.z) / _IntrinsicsVector.x;
-    // float y = depth * (id.y - _IntrinsicsVector.w) / _IntrinsicsVector.y;
-    // float z = depth;
-    float xrw = (float(id.x) - _IntrinsicsVector.z) * depth / _IntrinsicsVector.x;
-    float yrw = (float(id.y) - _IntrinsicsVector.w) * depth / _IntrinsicsVector.y;
+    float xrw = (float(gridPoint.x) - _IntrinsicsVector.z) * depth / _IntrinsicsVector.x;
+    float yrw = (float(gridPoint.y) - _IntrinsicsVector.w) * depth / _IntrinsicsVector.y;
     float3 prw = float3(xrw, yrw, depth);
     // float4 pos = mul(_TransformMatrix, float4(prw, 1.0));
     float4 pos = float4(prw, 1.0);
     p.position = pos.xyz / pos.w;
     p.color = color;
-    p.scale = 0.5;// * max(1.0, pos.z);
+    p.scale = 3.5;// * max(1.0, pos.z);
 
     _ParticleBuffer[index] = p;
 }
