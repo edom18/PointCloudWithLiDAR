@@ -33,8 +33,6 @@ public class PointCloudSource : MonoBehaviour
 
         _metadata.position = _camera.transform.position;
         _metadata.rotation = _camera.transform.rotation;
-        _metadata.projectionMatrix = _projectionMatrix;
-        _metadata.depthRange = new Vector2(_minDepth, _maxDepth);
 
         _metadata.intrinsic = new Vector4(
             intrinsics.focalLength.x,
