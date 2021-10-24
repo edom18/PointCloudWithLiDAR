@@ -7,7 +7,6 @@
     SubShader
     {
         Blend SrcAlpha OneMinusSrcAlpha
-        ZTest Off
         Cull Back
         Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         LOD 100
