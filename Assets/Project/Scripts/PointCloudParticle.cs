@@ -22,7 +22,6 @@ public class PointCloudParticle : MonoBehaviour
 
     public Texture ColorMap { get; set; }
     public Texture DepthMap { get; set; }
-    public Vector4 ProjectionVector { get; set; } = new Vector4(0, 0, 1, 1);
     public Vector4 IntrinsicsVector { get; set; } = new Vector4(1, 1, 0, 0);
     public int[] CameraResolution { get; set; }
     
@@ -106,7 +105,6 @@ public class PointCloudParticle : MonoBehaviour
         _computeShader.SetTexture(_kernelId, "_ColorMap", ColorMap);
         _computeShader.SetTexture(_kernelId, "_DepthMap", DepthMap);
         _computeShader.SetInts("_CameraResolution", CameraResolution);
-        _computeShader.SetVector("_ProjectionVector", ProjectionVector);
         _computeShader.SetVector("_IntrinsicsVector", IntrinsicsVector);
         _computeShader.SetMatrix("_TransformMatrix", transform.localToWorldMatrix);
         _computeShader.Dispatch(_kernelId, _width / 8, _height / 8, 1);
