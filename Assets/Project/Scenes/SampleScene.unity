@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850265, g: 0.3713928, b: 0.49600852, a: 1}
+  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -966,7 +966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HumanSegmentationStencilMode: 3
   m_HumanSegmentationDepthMode: 2
-  m_EnvironmentDepthMode: 1
+  m_EnvironmentDepthMode: 3
   m_OcclusionPreferenceMode: 0
 --- !u!1 &776584063
 GameObject:
