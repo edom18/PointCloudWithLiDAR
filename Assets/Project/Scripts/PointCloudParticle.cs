@@ -13,13 +13,14 @@ public class PointCloudParticle : MonoBehaviour
 
     [SerializeField] private int _width = 256;
     [SerializeField] private int _height = 256;
-    [SerializeField] private float _scale = 0.05f;
+    [SerializeField] private float _confThreshold = 0.5f;
     [SerializeField] private ComputeShader _computeShader = null;
     [SerializeField] private Material _particleMat;
     [SerializeField] private Mesh _particleMesh;
 
     public Texture ColorMap { get; set; }
     public Texture DepthMap { get; set; }
+    public Texture ConfidenceMap { get; set; }
     public Vector4 Intrinsics { get; set; } = new Vector4(1, 1, 0, 0);
     public Vector4 GridPointsScale { get; set; } = Vector4.one;
 
@@ -113,8 +114,10 @@ public class PointCloudParticle : MonoBehaviour
     {
         _computeShader.SetInt("_Width", _width);
         _computeShader.SetInt("_Height", _height);
+        _computeShader.SetFloat("_ConfThreshold", _confThreshold);
         _computeShader.SetTexture(_kernelId, "_ColorMap", ColorMap);
         _computeShader.SetTexture(_kernelId, "_DepthMap", DepthMap);
+        _computeShader.SetTexture(_kernelId, "_ConfidenceMap", ConfidenceMap);
         _computeShader.SetInts("_DepthResolution", _depthResolutionArray);
         _computeShader.SetVector("_IntrinsicsVector", Intrinsics);
         _computeShader.SetVector("_GridPointsScale", GridPointsScale);

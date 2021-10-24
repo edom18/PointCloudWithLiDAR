@@ -18,8 +18,9 @@ public class PointCloudSource : MonoBehaviour
 
     public RenderTexture ColorTexture { get; private set; }
     public Texture DepthTexture { get; private set; }
+    public Texture ConfidenceTexture { get; private set; }
     public Metadata Metadata => _metadata;
-    public bool IsReady => (ColorTexture != null) && (DepthTexture != null);
+    public bool IsReady => (ColorTexture != null) && (DepthTexture != null) && (ConfidenceTexture != null);
 
     private int _width = 1024;
     private int _height = 1024;
@@ -82,6 +83,8 @@ public class PointCloudSource : MonoBehaviour
     /// <param name="args">An argument that stores an occlusion info.</param>
     private void OnOcclusionFrameReceived(AROcclusionFrameEventArgs args)
     {
+        ConfidenceTexture = _occlusionManager.environmentDepthConfidenceTexture;
+        
         for (int i = 0; i < args.textures.Count; i++)
         {
             int id = args.propertyNameIds[i];

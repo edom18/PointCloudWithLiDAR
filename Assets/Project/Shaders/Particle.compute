@@ -5,9 +5,11 @@
 RWStructuredBuffer<Particle> _ParticleBuffer;
 Texture2D<float4> _ColorMap;
 Texture2D<float4> _DepthMap;
+Texture2D<float4> _ConfidenceMap;
 
 int _Width;
 int _Height;
+float _ConfThreshold;
 float4 _IntrinsicsVector;
 float4x4 _TransformMatrix;
 uint2 _DepthResolution;
@@ -26,6 +28,7 @@ void Update(uint3 id : SV_DispatchThreadID)
     Particle p = _ParticleBuffer[index];
     float4 color = _ColorMap.SampleLevel(_LinearClamp, uv, 0);
     float depth = _DepthMap.SampleLevel(_LinearClamp, uv, 0).x * 1000.0;
+    float confidence = _ConfidenceMap.SampleLevel(_LinearClamp, uv, 0).x;
     float xrw = (float(gridPoint.x) - _IntrinsicsVector.z) * depth / _IntrinsicsVector.x;
     float yrw = (float(gridPoint.y) - _IntrinsicsVector.w) * depth / _IntrinsicsVector.y;
     float3 prw = float3(xrw, yrw, depth);
@@ -39,7 +42,7 @@ void Update(uint3 id : SV_DispatchThreadID)
     pos = mul(_TransformMatrix, float4(pos.xyz, 1.0));
     p.position = pos.xyz / pos.w;
     p.color = color;
-    p.scale = 3.0 * s;
+    p.scale = 3.0 * s * (confidence >= _ConfThreshold);
 
     _ParticleBuffer[index] = p;
 }
