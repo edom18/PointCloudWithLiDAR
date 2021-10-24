@@ -34,10 +34,16 @@ void Update(uint3 id : SV_DispatchThreadID)
     float yrw = (float(gridPoint.y) - _IntrinsicsVector.w) * depth / _IntrinsicsVector.y;
     float3 prw = float3(xrw, yrw, depth);
     // float4 pos = mul(_TransformMatrix, float4(prw, 1.0));
-    float4 pos = float4(prw, 1.0);
+    float s = 0.001;
+    float4 pos = mul(float4x4(
+        s, 0, 0, 0,
+        0, s, 0, 0,
+        0, 0, s, 0,
+        0, 0, 0, 1
+        ), float4(prw, 1.0));
     p.position = pos.xyz / pos.w;
     p.color = color;
-    p.scale = 3.5;// * max(1.0, pos.z);
+    p.scale = 3.0 * s;
 
     _ParticleBuffer[index] = p;
 }
