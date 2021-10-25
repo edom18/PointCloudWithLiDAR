@@ -15,6 +15,7 @@ public class PointCloudParticleView : MonoBehaviour
     [SerializeField] private Transform _container;
     [SerializeField] private Button _posResetButton;
     [SerializeField] private Button _rotResetButton;
+    [SerializeField] private bool _isRotate = true;
     private bool _isDragging = false;
     private Vector3 _prevPos = Vector2.zero;
     private Vector3 _initPos = Vector3.zero;
@@ -57,7 +58,7 @@ public class PointCloudParticleView : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Dragging(Input.mousePosition, false);
+            Dragging(Input.mousePosition, _isRotate);
         }
 
         if (Input.GetMouseButtonUp(0))
