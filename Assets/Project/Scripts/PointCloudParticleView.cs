@@ -10,6 +10,8 @@ public class PointCloudParticleView : MonoBehaviour
     [SerializeField] private PointCloudParticle _pointCloudParticle;
     [SerializeField] private Slider _slider;
 
+    [SerializeField] private Shader _demuxShader;
+
     private bool _firstTake = true;
 
     [SerializeField] private Transform _container;
@@ -22,10 +24,17 @@ public class PointCloudParticleView : MonoBehaviour
 
     private Vector3 _offsetPos = Vector3.zero;
 
+    private Material _demuxMaterial;
+    private RenderTexture _demuxTexture;
+
+    public RenderTexture DemuxTexture => _demuxTexture;
+
     #region ### ------------------------------ MonoBehaviour ------------------------------ ###
 
     private void Awake()
     {
+        _demuxMaterial = new Material(_demuxShader);
+        
         _initPos = transform.localPosition;
 
         UpdateParticle();
@@ -89,6 +98,13 @@ public class PointCloudParticleView : MonoBehaviour
 #endif
     }
 
+    private void OnDrawGizmos()
+    {
+        if (_demuxTexture == null) return;
+        
+        Gizmos.DrawGUITexture(new Rect(0, 300, _demuxTexture.width, _demuxTexture.height), _demuxTexture);
+    }
+
     #endregion ### ------------------------------ MonoBehaviour ------------------------------ ###
 
     private void UpdatePosition()
@@ -141,8 +157,13 @@ public class PointCloudParticleView : MonoBehaviour
             _pointCloudParticle.Initialize(metadata.depthResolution);
         }
 
+        if (_demuxTexture == null) CreateRenderTexture(_pointCloudSource.DepthTexture.width, _pointCloudSource.DepthTexture.height);
+
+        _demuxMaterial.SetTexture("_MainTex", _pointCloudSource.DepthTexture);
+        Graphics.Blit(null, _demuxTexture, _demuxMaterial);
+
         _pointCloudParticle.ColorMap = _pointCloudSource.ColorTexture;
-        _pointCloudParticle.DepthMap = _pointCloudSource.DepthTexture;
+        _pointCloudParticle.DepthMap = _demuxTexture;
         _pointCloudParticle.ConfidenceMap = _pointCloudSource.ConfidenceTexture;
         _pointCloudParticle.Intrinsics = metadata.intrinsic;
         _pointCloudParticle.DepthResolution = metadata.depthResolution;
@@ -153,5 +174,13 @@ public class PointCloudParticleView : MonoBehaviour
             0, 0);
 
         _pointCloudParticle.UpdateParticles();
+    }
+
+    private void CreateRenderTexture(int width, int height)
+    {
+        if (_demuxTexture != null) _demuxTexture.Release();
+        
+        _demuxTexture = new RenderTexture(width, height, 0);
+        _demuxTexture.Create();
     }
 }
