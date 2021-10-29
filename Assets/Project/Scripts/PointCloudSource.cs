@@ -11,16 +11,18 @@ public class PointCloudSource : MonoBehaviour
     [Space] [SerializeField] private float _minDepth = 0.2f;
     [SerializeField] private float _maxDepth = 3.2f;
     [SerializeField] private Shader _makeRGBShader;
+    [SerializeField] private Shader _makeDepth2HueShader;
 
     private Metadata _metadata;
     private Material _makeRGBMaterial;
+    private Material _makeDepth2HueMaterial;
     private Matrix4x4 _projectionMatrix;
 
     public RenderTexture ColorTexture { get; private set; }
-    public Texture DepthTexture { get; private set; }
+    public RenderTexture DepthTexture { get; private set; }
     public Texture ConfidenceTexture { get; private set; }
     public Metadata Metadata => _metadata;
-    public bool IsReady => (ColorTexture != null) && (DepthTexture != null) && (ConfidenceTexture != null);
+    public bool IsReady => (ColorTexture != null) && (DepthTexture != null);// && (ConfidenceTexture != null);
 
     private int _width = 1024;
     private int _height = 1024;
@@ -83,7 +85,7 @@ public class PointCloudSource : MonoBehaviour
     /// <param name="args">An argument that stores an occlusion info.</param>
     private void OnOcclusionFrameReceived(AROcclusionFrameEventArgs args)
     {
-        ConfidenceTexture = _occlusionManager.environmentDepthConfidenceTexture;
+        // ConfidenceTexture = _occlusionManager.environmentDepthConfidenceTexture;
         
         for (int i = 0; i < args.textures.Count; i++)
         {
@@ -92,7 +94,7 @@ public class PointCloudSource : MonoBehaviour
 
             if (id == ShaderID.EnvironmentDepth)
             {
-                DepthTexture = tex;
+                _makeDepth2HueMaterial.SetTexture(ShaderID.EnvironmentDepth, tex);
 
                 if (IsReady) UpdateMetadata();
             }
@@ -123,6 +125,7 @@ public class PointCloudSource : MonoBehaviour
 
         // Update the render texture.
         Graphics.Blit(null, ColorTexture, _makeRGBMaterial, 0);
+        Graphics.Blit(null, DepthTexture, _makeDepth2HueMaterial, 0);
     }
 
     private void OnDestroy()
@@ -136,6 +139,7 @@ public class PointCloudSource : MonoBehaviour
     private void CreateMaterials()
     {
         _makeRGBMaterial = new Material(_makeRGBShader);
+        _makeDepth2HueMaterial = new Material(_makeDepth2HueShader);
     }
 
     private void CreateRenderTextures()
@@ -144,11 +148,14 @@ public class PointCloudSource : MonoBehaviour
 
         ColorTexture = new RenderTexture(_width, _height, 0);
         ColorTexture.Create();
+
+        DepthTexture = new RenderTexture(_width, _height, 0);
+        DepthTexture.Create();
     }
 
     private void ReleaseRenderTextures()
     {
         if (ColorTexture != null) ColorTexture.Release();
-        if (DepthTexture != null) Destroy(DepthTexture);
+        if (DepthTexture != null) DepthTexture.Release();
     }
 }

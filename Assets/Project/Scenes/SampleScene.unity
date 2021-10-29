@@ -782,6 +782,7 @@ MonoBehaviour:
   _container: {fileID: 745338911}
   _posResetButton: {fileID: 1033348083}
   _rotResetButton: {fileID: 1813423288}
+  _isRotate: 1
 --- !u!4 &633138156
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,6 +1304,7 @@ MonoBehaviour:
   _minDepth: 0.2
   _maxDepth: 3.2
   _makeRGBShader: {fileID: 4800000, guid: eee69c76a58da7b4bba372a40c183fb6, type: 3}
+  _makeDepth2HueShader: {fileID: 4800000, guid: 56a0e594c3e8a084786e678f14e39a80, type: 3}
 --- !u!4 &916409531
 Transform:
   m_ObjectHideFlags: 0
